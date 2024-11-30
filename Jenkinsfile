@@ -16,6 +16,18 @@ pipeline {
             }
         }
 
+        stage('Unset DOCKER_HOST') {
+            steps {
+                script {
+                    // Unset the DOCKER_HOST environment variable if it's set
+                    env.DOCKER_HOST = null
+                }
+                sh '''
+                echo "Unset DOCKER_HOST to ensure local Docker socket is used."
+                '''
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -54,7 +66,7 @@ pipeline {
                     string(credentialsId: 'openshift-token', variable: 'OPENSHIFT_TOKEN')
                 ]) {
                     sh '''
-                    oc login --token=$bahgatoc --server=https://your-openshift-api-server:6443
+                    oc login --token=$OPENSHIFT_TOKEN --server=https://your-openshift-api-server:6443
                     '''
                 }
             }
