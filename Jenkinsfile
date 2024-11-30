@@ -18,12 +18,10 @@ pipeline {
 
         stage('Unset DOCKER_HOST') {
             steps {
-                script {
-                    // Unset the DOCKER_HOST environment variable if it's set
-                    env.DOCKER_HOST = null
-                }
                 sh '''
-                echo "Unset DOCKER_HOST to ensure local Docker socket is used."
+                # Unset the DOCKER_HOST environment variable if set
+                unset DOCKER_HOST
+                echo "DOCKER_HOST has been unset."
                 '''
             }
         }
