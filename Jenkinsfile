@@ -7,7 +7,7 @@ pipeline {
         AWS_DEFAULT_REGION     = 'eu-north-1'                        // Your AWS region
         ECR_REPOSITORY         = 'bahgat/nti'                        // Your ECR repository name
         AWS_ACCOUNT_ID         = '908027402088'                      // Replace with your actual AWS Account ID
-        OPENSHIFT_TOKEN        = credentials('bahagtoc')             // Jenkins credential ID for OpenShift Token
+        OPENSHIFT_TOKEN        = credentials('bahgatoc')             // Jenkins credential ID for OpenShift Token
     }
 
     stages {
