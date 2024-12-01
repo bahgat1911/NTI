@@ -57,7 +57,7 @@ pipeline {
         stage('Login to OpenShift') {
             steps {
                 sh '''
-                oc login --token=$OPENSHIFT_TOKEN --server=https://your-openshift-api-server:6443
+                oc login --token=$OPENSHIFT_TOKEN --server=https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
                 '''
             }
         }
