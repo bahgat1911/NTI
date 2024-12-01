@@ -65,7 +65,7 @@ pipeline {
         stage('Deploy to OpenShift') {
             steps {
                 sh '''
-                oc project your-project
+                oc project bahgat-20-dev
 
                 # Update the image in the deployment
                 oc set image deployment/your-deployment your-container=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/${ECR_REPOSITORY}:${BRANCH_NAME}-${BUILD_NUMBER} --record
