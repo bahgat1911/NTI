@@ -61,7 +61,7 @@ pipeline {
         stage('Login to OpenShift') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'openshift-token', variable: 'OPENSHIFT_TOKEN')
+                    string(credentialsId: 'bahgatoc', variable: 'OPENSHIFT_TOKEN')
                 ]) {
                     sh '''
                     oc login --token=$OPENSHIFT_TOKEN --server=https://your-openshift-api-server:6443
