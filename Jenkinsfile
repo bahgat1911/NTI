@@ -62,18 +62,19 @@ pipeline {
             }
         }
 
-        stage('Deploy to OpenShift') {
-            steps {
-                sh '''
-                oc project bahgat-20-dev
+       stage('Deploy to OpenShift') {
+    steps {
+        sh '''
+        oc login --token=$OPENSHIFT_TOKEN --server=https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
+        oc project bahgat-20-dev
 
-                # Apply the deployment manifest
-                oc apply -f openshift/deployment.yaml
+        # Apply the deployment manifest
+        oc apply -f openshift/deployment.yaml
 
-                # Update the image in the deployment
-                oc set image deployment/your-deployment your-container=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/${ECR_REPOSITORY}:${BRANCH_NAME}-${BUILD_NUMBER}
-                '''
-            }
-        }
+        # Force update the image
+        oc set image deployment/your-deployment your-container=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/${ECR_REPOSITORY}:${BRANCH_NAME}-${BUILD_NUMBER}
+        '''
+    }
+}
     }
 }
