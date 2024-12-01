@@ -9,10 +9,6 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
-
-# Copy the .env.production file
-COPY .env.production ./
-
 # Copy the rest of the application code
 COPY . .
 
