@@ -5,7 +5,7 @@ pipeline {
         AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')    // Jenkins credential ID for AWS Access Key ID
         AWS_SECRET_ACCESS_KEY = credentials('bahgataws')            // Jenkins credential ID for AWS Secret Access Key
         AWS_DEFAULT_REGION    = 'eu-north-1'                         // Your AWS region
-        ECR_REPOSITORY        = 'your-ecr-repo'                     // Your ECR repository name
+        ECR_REPOSITORY        = 'bahgat/nti'                     // Your ECR repository name
         AWS_ACCOUNT_ID        = '908027402088'               // Replace with your actual AWS Account ID
     }
 
