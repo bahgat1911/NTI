@@ -2,11 +2,12 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')    // Jenkins credential ID for AWS Access Key ID
-        AWS_SECRET_ACCESS_KEY = credentials('bahgataws')            // Jenkins credential ID for AWS Secret Access Key
-        AWS_DEFAULT_REGION    = 'eu-north-1'                         // Your AWS region
-        ECR_REPOSITORY        = 'bahgat/nti'                     // Your ECR repository name
-        AWS_ACCOUNT_ID        = '908027402088'               // Replace with your actual AWS Account ID
+        AWS_ACCESS_KEY_ID      = credentials('aws-access-key-id')    // Jenkins credential ID for AWS Access Key ID
+        AWS_SECRET_ACCESS_KEY  = credentials('bahgataws')            // Jenkins credential ID for AWS Secret Access Key
+        AWS_DEFAULT_REGION     = 'eu-north-1'                        // Your AWS region
+        ECR_REPOSITORY         = 'bahgat/nti'                        // Your ECR repository name
+        AWS_ACCOUNT_ID         = '908027402088'                      // Replace with your actual AWS Account ID
+        OPENSHIFT_TOKEN        = credentials('bahagtoc')             // Jenkins credential ID for OpenShift Token
     }
 
     stages {
@@ -36,15 +37,10 @@ pipeline {
 
         stage('Login to ECR') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'bahgataws', variable: 'AWS_SECRET_ACCESS_KEY')
-                ]) {
-                    sh '''
-                    aws ecr get-login-password --region $AWS_DEFAULT_REGION | \
-                    docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-                    '''
-                }
+                sh '''
+                aws ecr get-login-password --region $AWS_DEFAULT_REGION | \
+                docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+                '''
             }
         }
 
@@ -60,13 +56,9 @@ pipeline {
 
         stage('Login to OpenShift') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'bahgatoc', variable: 'OPENSHIFT_TOKEN')
-                ]) {
-                    sh '''
-                    oc login --token=$OPENSHIFT_TOKEN --server=https://your-openshift-api-server:6443
-                    '''
-                }
+                sh '''
+                oc login --token=$OPENSHIFT_TOKEN --server=https://your-openshift-api-server:6443
+                '''
             }
         }
 
