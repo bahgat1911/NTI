@@ -1,23 +1,12 @@
-# Use the official Python image as a base
-FROM python:3.9-slim-buster
-
-# Set environment variables
-ENV PYTHONUNBUFFERED 1
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy the requirements file and install dependencies
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
-# Copy the application code into the container
-COPY . /app
-
-# Expose port 5000 to the outside world
-EXPOSE 5000
-
-# Run the Flask app when the container launches
-CMD ["flask", "run"]
+FROM jenkins/jenkins:2.479.1-jdk17
+USER root
+RUN apt-get update && apt-get install -y lsb-release
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+USER jenkins
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
