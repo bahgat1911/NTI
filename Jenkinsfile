@@ -21,7 +21,7 @@ pipeline {
 
         stage('Build Backend Docker Image') {
             steps {
-                dir('nti-project/backend') {
+                dir('MaramNTI/nti-project/backend') {
                     script {
                         docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_BACKEND_REPO}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}")
                     }
@@ -31,7 +31,7 @@ pipeline {
 
         stage('Build Frontend Docker Image') {
             steps {
-                dir('nti-project/frontend') {
+                dir('MaramNTI/nti-project/frontend') {
                     script {
                         docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_FRONTEND_REPO}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}")
                     }
@@ -80,12 +80,11 @@ pipeline {
         stage('Deploy to OpenShift') {
             steps {
                 sh '''
-                # Apply individual OpenShift deployment YAML files
-                oc apply -f openshift/backend-deployment.yaml
-                oc apply -f openshift/frontend-deployment.yaml
-                oc apply -f openshift/database-deployment.yaml
-                oc apply -f openshift/database-service.yaml
-
+                # Apply OpenShift deployment YAML
+   oc apply -f openshift/backend-deployment.yaml
+        oc apply -f openshift/frontend-deployment.yaml
+        oc apply -f openshift/database-deployment.yaml
+        oc apply -f openshift/database-service.yaml
                 # Update backend image
                 oc set image deployment/backend backend=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_BACKEND_REPO:$BRANCH_NAME-$BUILD_NUMBER
 
